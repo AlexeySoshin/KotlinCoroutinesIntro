@@ -1,9 +1,10 @@
 package me.soshin
 
 import kotlinx.coroutines.experimental.*
+import java.util.*
 
 
-fun main(args: Array<String>) = runBlocking<Unit> {
+fun main(args: Array<String>) {
 
 
     val result1 = async<String>(CommonPool) {
@@ -24,20 +25,25 @@ fun main(args: Array<String>) = runBlocking<Unit> {
         result1.cancel()
     }
 
-    result1.join()
-    result2.join()
+    // Since main is not async by itself, we need to wrap this in block
+    runBlocking {
+        result1.join()
+        result2.join()
+    }
 }
 
 suspend fun cdnCall(name: String): String {
-    val retries = (Math.random() * 10).toInt() + 2
+    val retries = Random().nextInt(10) + 2
 
     try {
         repeat(retries) { i ->
-            delay(((Math.random() * 500) + 500).toLong())
+            delay((Random().nextInt(500) + 500).toLong())
             println("$name still working ($i-$retries)...")
         }
     } catch (ce: CancellationException) {
         println("$name was cancelled")
+    } finally {
+        println("I can still do finally")
     }
 
     return name
