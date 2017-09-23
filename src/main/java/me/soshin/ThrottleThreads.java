@@ -7,7 +7,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- *
+ * Introducing thread pool protects from OutOfMemory exceptions,
+ * but slows the entire execution
  */
 public class ThrottleThreads {
 
@@ -39,6 +40,7 @@ public class ThrottleThreads {
             });
         }
 
+        pool.awaitTermination(20, TimeUnit.SECONDS);
         latch.await(20, TimeUnit.SECONDS);
 
         System.out.println(String.format("Took me %s millis to complete %s tasks",
