@@ -12,7 +12,7 @@ public class LeakThreads {
     public static void main(final String[] args) {
         System.out.println("Heap is " + Runtime.getRuntime().totalMemory());
 
-        final AtomicInteger counter = new AtomicInteger(0);
+        final AtomicInteger counter = new AtomicInteger();
         try {
             for (int i = 0; i < 10_000; i++) {
                 new Thread(() -> {
