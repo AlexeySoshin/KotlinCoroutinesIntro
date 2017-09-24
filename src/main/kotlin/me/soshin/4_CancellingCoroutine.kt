@@ -4,10 +4,18 @@ import kotlinx.coroutines.experimental.*
 import java.util.*
 
 
+/**
+ * Let's have to concurrent "network" calls
+ * When the first arrives, we cancel the other one, because we don't care about its results anymore
+ */
 fun main(args: Array<String>) {
 
+    fun onComplete(winner: Deferred<String>, loser: Deferred<String>) {
+        println("${winner.getCompleted()} won")
+        loser.cancel()
+    }
 
-    val result1 = async<String>(CommonPool) {
+    val result1 = async(CommonPool) {
         cdnCall("A")
     }
 
@@ -16,13 +24,11 @@ fun main(args: Array<String>) {
     }
 
     result1.invokeOnCompletion {
-        println("${result1.getCompleted()} won")
-        result2.cancel()
+        onComplete(result1, result2)
     }
 
     result2.invokeOnCompletion {
-        println("${result2.getCompleted()} won")
-        result1.cancel()
+        onComplete(result2, result1)
     }
 
     // Since main is not async by itself, we need to wrap this in block
@@ -32,18 +38,23 @@ fun main(args: Array<String>) {
     }
 }
 
+/**
+ * Will return result after some retries and delays
+ */
 suspend fun cdnCall(name: String): String {
-    val retries = Random().nextInt(10) + 2
+    // Between 2-10 retries
+    val retries = Random().nextInt(8) + 2
 
     try {
         repeat(retries) { i ->
+            // Delay between 0.5-1second
             delay((Random().nextInt(500) + 500).toLong())
             println("$name still working ($i-$retries)...")
         }
     } catch (ce: CancellationException) {
         println("$name was cancelled")
     } finally {
-        println("I can still do finally")
+        println("$name can still do finally")
     }
 
     return name

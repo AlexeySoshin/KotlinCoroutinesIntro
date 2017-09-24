@@ -8,6 +8,9 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
 
+/**
+ * Same example we've seen crashing with threads, now with coroutines
+ */
 fun main(args: Array<String>) {
 
     val latch = CountDownLatch(10_000)

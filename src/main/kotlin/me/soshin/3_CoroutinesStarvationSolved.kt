@@ -28,6 +28,10 @@ suspend fun AbstractGenericCoroutineFactory.longCoroutine(index: Int) {
     println("$index) Most beautiful UUID was $uuid")
 }
 
+/**
+ * Coroutine cannot stop at any point of code, but only at suspending point
+ * If you have tight loops, use yield once in a while
+ */
 fun main(args: Array<String>) {
 
     val latch = CountDownLatch(10 * 2)
@@ -38,7 +42,8 @@ fun main(args: Array<String>) {
         }
     }
 
-    for (i in 1..10) {
+    // Same as above loop, but neater
+    List(10) { i ->
         async(CommonPool) {
             AbstractGenericCoroutineFactory.shortCoroutine(i)
             latch.countDown()
