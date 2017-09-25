@@ -10,7 +10,6 @@ import java.util.*
 
 fun main(args: Array<String>) = runBlocking {
 
-
     val cdn1 = produce(CommonPool) {
         delay(Random().nextInt(1000).toLong())
 
