@@ -32,7 +32,7 @@ fun main(args: Array<String>) {
 }
 
 object AbstractGenericCoroutineFactory {
-    suspend fun greedyLongCoroutine(index: Int) {
+    fun greedyLongCoroutine(index: Int) {
 
         var uuid = UUID.randomUUID();
         for (i in 1..100_000) {
