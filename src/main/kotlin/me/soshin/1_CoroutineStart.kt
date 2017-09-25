@@ -1,8 +1,8 @@
 package me.soshin;
 
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
 
     val start = System.currentTimeMillis()
     for (i in 1..10_000) {
-        async(CommonPool) {
+        launch(CommonPool) {
             c.incrementAndGet()
             delay(100)
             c.incrementAndGet()
