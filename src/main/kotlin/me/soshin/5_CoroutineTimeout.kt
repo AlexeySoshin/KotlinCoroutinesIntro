@@ -1,7 +1,6 @@
 package me.soshin
 
 import kotlinx.coroutines.experimental.*
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -33,7 +32,7 @@ fun main(args: Array<String>) = runBlocking {
 
 suspend fun longOperation(name: String): String {
 
-    val repeats = Random().nextInt(10) + 3
+    val repeats = 10
 
     repeat(repeats) { i ->
         println("$i) $name still working: $i-$repeats...")

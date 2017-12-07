@@ -34,7 +34,7 @@ fun main(args: Array<String>) {
 object AbstractGenericCoroutineFactory {
     fun greedyLongCoroutine(index: Int) {
 
-        var uuid = UUID.randomUUID();
+        var uuid = UUID.randomUUID()
         for (i in 1..100_000) {
             val newUuid = UUID.randomUUID()
 
