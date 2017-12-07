@@ -1,6 +1,5 @@
 package me.soshin;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -18,8 +17,6 @@ public class ThrottleThreads {
 
         final AtomicInteger counter = new AtomicInteger(0);
 
-        final CountDownLatch latch = new CountDownLatch(10_000);
-
         final long start = System.currentTimeMillis();
         for (int i = 0; i < 10_000; i++) {
             pool.submit(() -> {
@@ -32,8 +29,6 @@ public class ThrottleThreads {
 
                     // Do something again
                     counter.incrementAndGet();
-
-                    latch.countDown();
                 } catch (final InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -41,7 +36,7 @@ public class ThrottleThreads {
         }
 
         pool.awaitTermination(20, TimeUnit.SECONDS);
-        latch.await(20, TimeUnit.SECONDS);
+        pool.shutdown();
 
         System.out.println(String.format("Took me %s millis to complete %s tasks",
                 System.currentTimeMillis() - start, counter.get() / 2));
